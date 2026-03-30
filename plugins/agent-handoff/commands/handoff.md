@@ -70,6 +70,7 @@ Extraction focus:
 - Convert constraints into direct imperatives
 - Only include files the new agent can actually access (not gitignored or external references)
 - USER REQUESTS must be quoted verbatim, never paraphrased
+- If user requests reference temporary or session-scoped files (e.g. ~/.claude/plans/, /tmp/, session-generated files), inline the key content into TASK or PENDING — the new agent will NOT have access to those files
 - If there are no pending tasks, state what was last completed and what logical next steps would be
 
 Guiding questions for extraction:
