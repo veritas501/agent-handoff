@@ -7,7 +7,9 @@ argument-hint: [--brief]
 
 ## Purpose
 
-Use /handoff when the session context is getting too long, quality is degrading, or you want to start fresh while preserving essential context. This generates a structured context summary that can be pasted into a new session for seamless continuation.
+Use /handoff when the session context is getting too long, quality is degrading, or you want to start fresh while preserving essential context. This generates a structured context summary that a NEW AGENT can consume to continue work seamlessly.
+
+CRITICAL: The output is written FOR A NEW AGENT, not for the user. Every sentence should be actionable instructions or concrete state that another agent instance can directly use. Avoid human-readable summaries, status reports, or explanatory prose.
 
 Arguments: $ARGUMENTS
 
@@ -33,6 +35,7 @@ Arguments: $ARGUMENTS
 Before proceeding, confirm:
 - There is meaningful work or context in this session worth preserving
 - If the session is nearly empty or has no meaningful context, inform the user there is nothing to hand off, then stop
+- If all tasks are complete and there is nothing pending, warn the user that a handoff may not be necessary, but proceed if they confirm
 
 ### PHASE 2: Gather Deep Context
 
@@ -49,23 +52,32 @@ On top of the pre-collected git context, perform additional collection:
 
 ### PHASE 3: Extract and Structure
 
-Write the context summary from the user's first-person perspective ("I did...", "I told you...", "I found...").
+IMPORTANT: You are writing instructions for a new agent, not a report for the user.
+
+Write everything as direct, actionable context:
+- BAD: "The project uses a hybrid approach combining lightweight and full protocol features"
+- GOOD: "When adding new features, only auto-detect CLAUDE.md and TaskList. Do not add SCOPE.yml or STATUS.yml dependencies."
+
+- BAD: "The user prefers English for all command content"
+- GOOD: "All content in handoff.md must be in English. Do not mix Chinese and English."
+
+- BAD: "Future work may include testing the handoff output quality"
+- GOOD: "Next task: test handoff output by running /handoff in a session with active work, verify the output is agent-consumable"
 
 Extraction focus:
-- Emphasize capabilities and behavior, not file-by-file implementation details
-- Only retain information important for continuing the work
-- Avoid excessive implementation details (variable names, storage keys, constants) unless critical
+- Convert decisions into rules the new agent must follow
+- Convert completed work into current state the new agent can verify
+- Convert constraints into direct imperatives
+- Only include files the new agent can actually access (not gitignored or external references)
 - USER REQUESTS must be quoted verbatim, never paraphrased
-- EXPLICIT CONSTRAINTS must be quoted verbatim, never fabricated
+- If there are no pending tasks, state what was last completed and what logical next steps would be
 
 Guiding questions for extraction:
-- What was just done or implemented?
-- Which instructions are still relevant (e.g., follow patterns in the codebase)?
-- Which files were marked as important or are being modified?
-- Is there a plan or spec that should be included?
-- What important information was already communicated (libraries, patterns, constraints, preferences)?
-- What important technical details were discovered (APIs, methods, patterns)?
-- What caveats, limitations, or open questions were found?
+- What rules must the new agent follow when modifying this codebase?
+- What is the current state the new agent will find when it reads the files?
+- What task should the new agent work on next?
+- What mistakes should the new agent avoid (concrete gotchas, not general advice)?
+- What user preferences must be respected?
 
 ### PHASE 4: Format Output
 
@@ -77,27 +89,26 @@ Check if `$ARGUMENTS` contains `--brief`.
 HANDOFF CONTEXT (BRIEF)
 =======================
 
-GOAL
+TASK
 ----
-[One sentence describing what should be done next]
+[Concrete next action for the new agent. If no pending task, state "No pending task. Last completed: X"]
 
-CURRENT STATE
--------------
-- [Current state of the codebase or task]
-- [Build/test status if applicable]
+STATE
+-----
 - Branch: [branch name] @ [commit SHA]
+- [Build/test status if applicable]
+- [Key state the new agent needs to know]
 
-PENDING TASKS
--------------
-- [Tasks that were planned but not completed]
-- [Next logical steps to take]
-- [Any blockers or issues encountered]
+PENDING
+-------
+- [Concrete tasks with enough detail to execute]
+- [Blockers with specific error messages or file paths]
 
-KEY FILES
----------
-- [path/to/file1] - [brief role description]
-- [path/to/file2] - [brief role description]
-(Maximum 10 files, prioritized by importance)
+FILES
+-----
+- [path/to/file1] - [what to do with it or why it matters]
+- [path/to/file2] - [what to do with it or why it matters]
+(Maximum 10 files, only files the new agent can access)
 ```
 
 **If full mode (default)**, output the complete version:
@@ -110,53 +121,46 @@ USER REQUESTS (AS-IS)
 ---------------------
 - [Exact verbatim user requests - NOT paraphrased]
 
-GOAL
+TASK
 ----
-[One sentence describing what should be done next]
+[Concrete next action for the new agent. If no pending task, state "No pending task. Last completed: X"]
 
-WORK COMPLETED
---------------
-- [First person bullet points of what was done]
-- [Include specific file paths when relevant]
-- [Note key implementation decisions]
+COMPLETED
+---------
+- [What was done, stated as verifiable facts: "file X now contains Y", "endpoint Z returns W"]
+- [Include file paths so the new agent can verify]
 
-CURRENT STATE
--------------
-- [Current state of the codebase or task]
-- [Build/test status if applicable]
-- [Any environment or configuration state]
+STATE
+-----
 - Branch: [branch name] @ [commit SHA]
-- Uncommitted changes: [yes/no, brief description]
+- Uncommitted changes: [yes/no, what files]
+- [Build/test status if applicable]
+- [Environment or configuration state that affects work]
 
-PENDING TASKS
--------------
-- [Tasks that were planned but not completed]
-- [Next logical steps to take]
-- [Any blockers or issues encountered]
+PENDING
+-------
+- [Concrete tasks with enough detail to execute without asking the user]
+- [Blockers with specific error messages or file paths]
 - [Current task status from TaskList if available]
 
-KEY FILES
----------
-- [path/to/file1] - [brief role description]
-- [path/to/file2] - [brief role description]
-(Maximum 10 files, prioritized by importance; include files from git diff/status)
+FILES
+-----
+- [path/to/file1] - [what to do with it or why it matters]
+- [path/to/file2] - [what to do with it or why it matters]
+(Maximum 10 files, only files the new agent can access)
 
-IMPORTANT DECISIONS
--------------------
-- [Technical decisions that were made and why]
-- [Trade-offs that were considered]
-- [Patterns or conventions established]
-
-EXPLICIT CONSTRAINTS
---------------------
-- [Verbatim constraints only - from user or project configuration]
+RULES
+-----
+- [Direct imperatives the new agent must follow, derived from decisions and constraints]
+- [User preferences stated as rules: "Always do X", "Never do Y"]
+- [Codebase conventions: "Commit messages use conventional commits", "Tests go in __tests__/"]
 - If none, write: None
 
-CONTEXT FOR CONTINUATION
-------------------------
-- [What the next session needs to know to continue]
-- [Warnings or gotchas to be aware of]
-- [References to documentation if relevant]
+GOTCHAS
+-------
+- [Specific pitfalls: "git log fails on empty repo without 2>/dev/null fallback"]
+- [Non-obvious behaviors: "plugin install changes command name to /agent-handoff:handoff"]
+- [Things that look wrong but are intentional]
 ```
 
 ### Output Rules
@@ -165,9 +169,9 @@ CONTEXT FOR CONTINUATION
 - Use `===` and `---` underline style for headers, no `#` markdown headers
 - No bold, italic, or code fences within content
 - Use workspace-relative paths for files
-- Only include information that matters for continuation
-- Pick an appropriate length based on complexity
-- USER REQUESTS (AS-IS) and EXPLICIT CONSTRAINTS must contain verbatim quotes only
+- Every bullet must be actionable or verifiable by the new agent
+- Do not include files the new agent cannot access (gitignored dirs, external references, temp files)
+- USER REQUESTS (AS-IS) must contain verbatim quotes only
 
 ---
 
@@ -195,8 +199,8 @@ The new session will have all context needed to continue seamlessly.
 - Provide a self-contained summary that works without access to the current session
 - Use workspace-relative file paths
 - Do NOT include sensitive information (API keys, credentials, secrets)
-- KEY FILES must not exceed 10 entries
-- GOAL should be a single sentence or short paragraph
+- FILES must not exceed 10 entries and must only reference accessible files
+- Every section should contain information a new agent can act on or verify
 
 ---
 

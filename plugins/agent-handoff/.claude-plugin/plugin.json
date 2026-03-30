@@ -1,7 +1,7 @@
 {
   "name": "agent-handoff",
   "description": "Generate structured handoff summaries for seamless cross-session continuation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "veritas501"
   },

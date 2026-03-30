@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Cross-session context handoff for AI coding agents",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "pluginRoot": "./plugins"
   },
   "plugins": [
@@ -13,7 +13,7 @@
       "name": "agent-handoff",
       "source": "./plugins/agent-handoff",
       "description": "Generate structured handoff summaries for seamless cross-session continuation",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "veritas501"
       },
