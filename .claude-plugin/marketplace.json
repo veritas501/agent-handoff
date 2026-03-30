@@ -1,0 +1,24 @@
+{
+  "name": "agent-handoff-marketplace",
+  "owner": {
+    "name": "veritas501"
+  },
+  "metadata": {
+    "description": "Cross-session context handoff for AI coding agents",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "agent-handoff",
+      "source": "./plugins/agent-handoff",
+      "description": "Generate structured handoff summaries for seamless cross-session continuation",
+      "version": "1.0.0",
+      "author": {
+        "name": "veritas501"
+      },
+      "keywords": ["handoff", "context", "session", "continuation", "agent"],
+      "category": "productivity"
+    }
+  ]
+}
