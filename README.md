@@ -8,6 +8,23 @@ When working with Claude Code, long sessions inevitably hit context window limit
 
 It automatically collects git state, task progress, conversation history, and project configuration, then synthesizes everything into a portable plain-text handoff document.
 
+## Why Handoff?
+
+Claude Code has a built-in mechanism called **compact** — when the context window fills up, the system automatically compresses earlier conversation turns. This is lossy and invisible: you don't control what gets kept or discarded, and the agent silently loses details it needed.
+
+Handoff takes a different approach:
+
+| | Compact | Handoff |
+|---|---|---|
+| **Trigger** | Automatic, when context is full | Manual, when you decide |
+| **Output** | Hidden internal compression | Visible, editable plain text |
+| **Control** | None — system decides what to keep | Full — you review before pasting |
+| **Audience** | Same agent, degraded context | New agent, fresh context window |
+| **Losses** | Unpredictable | None — structured extraction |
+| **Lessons learned** | Lost with compressed turns | Preserved in GOTCHAS ("Tried X, failed because Y, fix was Z") |
+
+The key insight: compact tries to keep a dying session alive. Handoff **starts a clean session with curated context** — the new agent gets exactly what it needs, nothing it doesn't, and learns from the previous agent's mistakes.
+
 ## Features
 
 - **Auto-collects git context** — branch, recent commits, diffs, uncommitted changes
@@ -60,11 +77,12 @@ The full handoff summary includes these sections:
 | USER REQUESTS (AS-IS) | Verbatim user requests from the session |
 | TASK | Concrete next action for the new agent |
 | COMPLETED | Verifiable facts about what was done |
+| LAST OPERATIONS | Last 3-5 concrete operations as few-shot examples for the new agent |
 | STATE | Branch, commit, uncommitted changes, build status |
 | PENDING | Concrete tasks with enough detail to execute |
 | FILES | Up to 10 accessible files with action context |
 | RULES | Direct imperatives derived from decisions and constraints |
-| GOTCHAS | Specific pitfalls and non-obvious behaviors |
+| GOTCHAS | Specific pitfalls, mistakes made, and non-obvious behaviors |
 
 The `--brief` mode outputs only TASK, STATE, PENDING, and FILES.
 
