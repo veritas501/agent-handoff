@@ -32,23 +32,17 @@ It automatically collects git state, task progress, conversation history, and pr
 
 ```bash
 mkdir -p .claude/commands
-curl -o .claude/commands/handoff.md https://raw.githubusercontent.com/veritas501/agent-handoff/main/plugins/agent-handoff/commands/handoff.md
-```
-
-### Manual - Global (all projects)
-
-```bash
-# Replace <namespace> with your preferred namespace
-mkdir -p ~/.claude/commands/<namespace>
-curl -o ~/.claude/commands/<namespace>/handoff.md https://raw.githubusercontent.com/veritas501/agent-handoff/main/plugins/agent-handoff/commands/handoff.md
+curl -o .claude/commands/handoff.md https://github.com/veritas501/agent-handoff/raw/refs/heads/master/plugins/agent-handoff/commands/handoff.md
 ```
 
 ## Usage
 
 ```
-/handoff              # Full context handoff summary
-/handoff --brief      # Condensed version (goal + state + tasks + files only)
+/agent-handoff:handoff              # Full context handoff summary
+/agent-handoff:handoff --brief      # Condensed version (goal + state + tasks + files only)
 ```
+
+If installed manually via `~/.claude/commands/`, the command is simply `/handoff`.
 
 Then in a new Claude Code session, paste the output as your first message and add your next request.
 
