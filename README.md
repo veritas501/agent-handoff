@@ -26,7 +26,12 @@ It automatically collects git state, task progress, conversation history, and pr
 
 # Install the plugin
 /plugin install agent-handoff@agent-handoff-marketplace
+
+# Reload to apply
+/reload-plugins
 ```
+
+To update the plugin after a new version is released, run the install and reload commands again.
 
 ### Manual - Project-level (single project)
 
@@ -53,16 +58,15 @@ The full handoff summary includes these sections:
 | Section | Description |
 |---------|-------------|
 | USER REQUESTS (AS-IS) | Verbatim user requests from the session |
-| GOAL | One sentence — what should be done next |
-| WORK COMPLETED | What was accomplished (first person) |
-| CURRENT STATE | Codebase state, branch, uncommitted changes |
-| PENDING TASKS | Incomplete work and next steps |
-| KEY FILES | Up to 10 most important files |
-| IMPORTANT DECISIONS | Technical decisions and rationale |
-| EXPLICIT CONSTRAINTS | Verbatim constraints from user or config |
-| CONTEXT FOR CONTINUATION | Warnings, gotchas, references |
+| TASK | Concrete next action for the new agent |
+| COMPLETED | Verifiable facts about what was done |
+| STATE | Branch, commit, uncommitted changes, build status |
+| PENDING | Concrete tasks with enough detail to execute |
+| FILES | Up to 10 accessible files with action context |
+| RULES | Direct imperatives derived from decisions and constraints |
+| GOTCHAS | Specific pitfalls and non-obvious behaviors |
 
-The `--brief` mode outputs only GOAL, CURRENT STATE, PENDING TASKS, and KEY FILES.
+The `--brief` mode outputs only TASK, STATE, PENDING, and FILES.
 
 ## Credits
 
