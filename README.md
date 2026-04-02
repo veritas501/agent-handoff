@@ -1,6 +1,6 @@
 # agent-handoff
 
-A Claude Code custom slash command for seamless cross-session context handoff.
+A Claude Code skill for seamless cross-session context handoff.
 
 ## What is this?
 
@@ -35,36 +35,53 @@ The key insight: compact tries to keep a dying session alive. Handoff **starts a
 
 ## Install
 
-### Via Plugin Marketplace (recommended)
+### Recommended: `npx skills`
 
 ```bash
-# Add the marketplace
-/plugin marketplace add veritas501/agent-handoff
-
-# Install the plugin
-/plugin install agent-handoff@agent-handoff-marketplace
-
-# Reload to apply
-/reload-plugins
+npx skills add veritas501/agent-handoff
 ```
 
-To update the plugin after a new version is released, run the install and reload commands again.
+After installation, tell Claude Code:
 
-### Manual - Project-level (single project)
+```text
+/handoff
+```
+
+Or simply say:
+
+```text
+帮我做个 handoff
+```
+
+### Alternative: clone directly into Claude Code skills
+
+```bash
+git clone https://github.com/veritas501/agent-handoff.git ~/.claude/skills/agent-handoff
+```
+
+Claude Code discovers it automatically.
+
+### Alternative: symlink for development
+
+```bash
+git clone https://github.com/veritas501/agent-handoff.git ~/code/agent-handoff
+mkdir -p ~/.claude/skills
+ln -s ~/code/agent-handoff ~/.claude/skills/agent-handoff
+```
+
+### Manual — project-level (single project only)
 
 ```bash
 mkdir -p .claude/commands
-curl -o .claude/commands/handoff.md https://github.com/veritas501/agent-handoff/raw/refs/heads/master/plugins/agent-handoff/commands/handoff.md
+curl -o .claude/commands/handoff.md https://github.com/veritas501/agent-handoff/raw/refs/heads/master/SKILL.md
 ```
 
 ## Usage
 
 ```
-/agent-handoff:handoff              # Full context handoff summary
-/agent-handoff:handoff --brief      # Condensed version (goal + state + tasks + files only)
+/handoff              # Full context handoff summary
+/handoff --brief      # Condensed version (goal + state + tasks + files only)
 ```
-
-If installed manually via `~/.claude/commands/`, the command is simply `/handoff`.
 
 Then in a new Claude Code session, paste the output as your first message and add your next request.
 

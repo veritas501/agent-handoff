@@ -1,9 +1,25 @@
 ---
-description: Generate a structured cross-session context handoff summary for seamless continuation in a new session
-argument-hint: [--brief]
+name: agent-handoff
+description: |
+  Generate a structured cross-session context handoff summary for seamless
+  continuation in a new Claude Code session. Use when: context is getting long,
+  quality is degrading, you want to start fresh while preserving context, or
+  any phrase like "handoff", "交班", "上下文交接", "session handoff", "context summary".
+  Produces a portable plain-text document optimized for a new agent to consume.
+  Do NOT use for: general status reports, debugging, or code generation tasks.
+argument-hint: "[--brief]"
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
 ---
 
-# Handoff Command
+# Agent Handoff Skill
+
+You are generating a cross-session context handoff summary.
 
 ## Purpose
 
