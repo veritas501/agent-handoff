@@ -50,7 +50,7 @@ After installation, tell Claude Code:
 Or simply say:
 
 ```text
-帮我做个 handoff
+generate a handoff summary
 ```
 
 ### Alternative: clone directly into Claude Code skills
@@ -69,12 +69,16 @@ mkdir -p ~/.claude/skills
 ln -s ~/code/agent-handoff ~/.claude/skills/agent-handoff
 ```
 
-### Manual — project-level (single project only)
+### Manual — single project
+
+Download `SKILL.md` into your project's `.claude/commands/` directory:
 
 ```bash
 mkdir -p .claude/commands
 curl -o .claude/commands/handoff.md https://github.com/veritas501/agent-handoff/raw/refs/heads/master/SKILL.md
 ```
+
+Then use `/handoff` in that project.
 
 ## Usage
 
