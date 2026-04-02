@@ -38,7 +38,7 @@ The key insight: compact tries to keep a dying session alive. Handoff **starts a
 ### Recommended: `npx skills`
 
 ```bash
-npx skills add veritas501/agent-handoff
+npx skills add -g -y veritas501/agent-handoff
 ```
 
 After installation, tell Claude Code:
